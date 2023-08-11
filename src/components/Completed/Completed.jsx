@@ -1,3 +1,3 @@
 export const Completed = () => {
-  return <h2>Operation is completed</h2>;
+  return <p>Operation is completed</p>;
 };

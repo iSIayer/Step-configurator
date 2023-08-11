@@ -1,3 +1,3 @@
 export const Payment = () => {
-  return <h2>Payment information</h2>;
+  return <p>Payment information</p>;
 };
