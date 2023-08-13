@@ -1,3 +1,3 @@
 export const Completed = () => {
-  return <p>Operation is completed</p>;
+  return <p className={"underline decoration-1"}>Operation is completed</p>;
 };
