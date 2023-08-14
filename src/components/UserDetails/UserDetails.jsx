@@ -17,10 +17,10 @@ export const UserDetails = ({ stupidData }) => {
             variant="h4"
             color="blue-gray"
 
-            // className={stepData.children[1].className}
+            // className={stupidData.children[1].className}
           >
-            {/* UserDetails */}
-            {stupidData.children[1].text}
+            UserDetails
+            {/* {stupidData.children[1].text} */}
           </Typography>
           <Typography color="gray" className="mt-1 font-normal">
             Enter your details to register.

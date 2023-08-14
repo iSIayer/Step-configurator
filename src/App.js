@@ -21,7 +21,7 @@ export function App() {
     )
       .then((response) => response.json())
       .then((res) => {
-        setStupidData(res.data[0].uidl[0]);
+        setStupidData(res.data[0].uidl[0].children);
       })
       .catch((error) => {
         console.error("Error fetching data from backend:", error);

@@ -45,8 +45,8 @@ export const Payment = ({ stupidData }) => {
     },
   ];
 
-  const paymentData = stupidData.children[0];
-  console.log(paymentData);
+  // const paymentData = stupidData.children[1];
+  // console.log(paymentData);
   return (
     <Tabs value={activeTab}>
       <TabsHeader
