@@ -1,19 +1,8 @@
-import { useState, useEffect } from "react";
-import { Stepper, Step, Button, Typography } from "@material-tailwind/react";
-import {
-  CurrencyDollarIcon,
-  UserIcon,
-  PhoneArrowUpRightIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/outline";
-import { UserDetails } from "./components/UserDetails/UserDetails";
-import { Payment } from "./components/Payment/Payment";
-import { Transactions } from "./components/Confirmation/Transactions";
-import { Completed } from "./components/Completed/Completed";
+import React, { useState, useEffect } from "react";
 
-export function App() {
+export const App = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [stupidData, setStupidData] = useState(null);
+  const [stupidData, setStupidData] = useState([]);
 
   useEffect(() => {
     fetch(
@@ -21,67 +10,77 @@ export function App() {
     )
       .then((response) => response.json())
       .then((res) => {
-        setStupidData(res.data[0].uidl[0].children);
+        setStupidData(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data from backend:", error);
       });
   }, []);
 
-  if (!stupidData) {
-    return <h1>Loading...</h1>;
+  if (stupidData.length === 0) {
+    return <p>Download data...</p>;
   }
 
-  const stepsContent = [
-    <UserDetails stupidData={stupidData} />,
-    <Payment stupidData={stupidData} />,
-    <Transactions />,
-    <Completed />,
-  ];
+  const data = stupidData[0].uidl[0];
 
-  const handleNext = () =>
-    setActiveStep((cur) => Math.min(cur + 1, stepsContent.length - 1));
-  const handlePrev = () => setActiveStep((cur) => Math.max(cur - 1, 0));
+  const handleNextStep = () => {
+    if (activeStep < data.children.length - 1) {
+      setActiveStep(activeStep + 1);
+    }
+  };
 
-  const appData = stupidData;
-  console.log(appData);
+  const handlePrevStep = () => {
+    if (activeStep > 0) {
+      setActiveStep(activeStep - 1);
+    }
+  };
 
   return (
-    appData && (
-      <div className="w-full px-24 py-4">
-        <Stepper activeStep={activeStep}>
-          <Step onClick={() => setActiveStep(0)}>
-            <UserIcon className="h-5 w-5" />
-          </Step>
-          <Step onClick={() => setActiveStep(1)}>
-            <CurrencyDollarIcon className="h-5 w-5" />
-          </Step>
-          <Step onClick={() => setActiveStep(2)}>
-            <PhoneArrowUpRightIcon className="h-5 w-5" />
-          </Step>
-          <Step onClick={() => setActiveStep(3)}>
-            <ShieldCheckIcon className="h-5 w-5" />
-          </Step>
-        </Stepper>
-        <div className="mt-32">
-          <Typography variant="h2" color="blue-gray">
-            {stepsContent[activeStep]}
-          </Typography>
-        </div>
-        <div className="mt-20 flex justify-between">
-          <Button onClick={handlePrev} disabled={activeStep === 0}>
-            {/* {uidata.children[0].text} */}
-            Next
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={activeStep === stepsContent.length - 1}
-          >
-            {/* {uidata.children[5].text} */}
-            Finish
-          </Button>
-        </div>
+    <div className={`${data.className} w-full px-24 py-4`}>
+      <div className={"flex justify-around items-center"}>
+        {stupidData &&
+          data.children.map(
+            (step, index) =>
+              step.type === "div" && (
+                <div key={index} className={"flex flex-col"}>
+                  <div
+                    key={index}
+                    onClick={() => setActiveStep(index)}
+                    className={`${index === activeStep && "active"} ${
+                      step.className
+                    } cursor-pointer mb-96`}
+                  >
+                    {step.text}
+                  </div>
+                  {step.children.map((elem, idx) => (
+                    <div key={idx}>
+                      <h2 key={idx} className={`${elem.className}`}>
+                        {elem.text}
+                      </h2>
+                    </div>
+                  ))}
+                </div>
+              )
+          )}
       </div>
-    )
+
+      <div className={"flex justify-between mt-96"}>
+        {stupidData &&
+          data.children.map((btn, index) =>
+            btn.type === "button" ? (
+              <button
+                disabled={activeStep === 0}
+                key={index}
+                onClick={
+                  btn.text === "Finish" ? handleNextStep : handlePrevStep
+                }
+                className={`${btn.className} cursor-pointer px-8 py-2 rounded-xl bg-blue-gray-500`}
+              >
+                {btn.text}
+              </button>
+            ) : null
+          )}
+      </div>
+    </div>
   );
-}
+};
