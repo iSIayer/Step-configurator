@@ -1,74 +1,45 @@
-import {
-  Tabs,
-  TabsHeader,
-  TabsBody,
-  Tab,
-  TabPanel,
-} from "@material-tailwind/react";
+import { useState } from "react";
 
-function TabsCustomAnimation() {
-  const data = [
-    {
-      label: "HTML",
-      value: "html",
-      desc: `It really matters and then like it really doesn't matter.
-      What matters is the people who are sparked by it. And the people
-      who are like offended by it, it doesn't matter.`,
-    },
-    {
-      label: "React",
-      value: "react",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
-    },
+export function TabsDefault({ tabsData }) {
+  console.log(tabsData);
+  const [activeTab, setActiveTab] = useState(tabsData[0].id);
 
-    {
-      label: "Vue",
-      value: "vue",
-      desc: `We're not always in the position that we want to be at.
-      We're constantly growing. We're constantly making mistakes. We're
-      constantly trying to express ourselves and actualize our dreams.`,
-    },
-
-    {
-      label: "Angular",
-      value: "angular",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
-    },
-
-    {
-      label: "Svelte",
-      value: "svelte",
-      desc: `We're not always in the position that we want to be at.
-      We're constantly growing. We're constantly making mistakes. We're
-      constantly trying to express ourselves and actualize our dreams.`,
-    },
-  ];
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+  };
 
   return (
-    <Tabs id="custom-animation" value="html">
-      <TabsHeader>
-        {data.map(({ label, value }) => (
-          <Tab key={value} value={value}>
-            {label}
-          </Tab>
+    <div className="max-w-6xl mx-auto mt-10">
+      <div className="flex justify-center border-b border-gray-200 pb-3 mb-8 w-full">
+        {tabsData.map((tab) => (
+          <div
+            key={tab.id}
+            onClick={() => handleTabClick(tab.id)}
+            className={`cursor-pointer py-2  w-48 text-center ${
+              activeTab === tab.id ? "bg-black text-white" : "bg-gray-200"
+            }`}
+          >
+            {tab.text}
+          </div>
         ))}
-      </TabsHeader>
-      <TabsBody
-        animate={{
-          initial: { y: 250 },
-          mount: { y: 0 },
-          unmount: { y: 250 },
-        }}
-      >
-        {data.map(({ value, desc }) => (
-          <TabPanel key={value} value={value}>
-            {desc}
-          </TabPanel>
-        ))}
-      </TabsBody>
-    </Tabs>
+      </div>
+      <div className="py-4">
+        {tabsData.map(
+          (tab) =>
+            tab.id === activeTab && (
+              <div
+                key={tab.id}
+                className="text-gray-800 flex flex-col items-center"
+              >
+                {tab.children.map((child) => (
+                  <div className="p-5" key={child.id}>
+                    {child.text}
+                  </div>
+                ))}
+              </div>
+            )
+        )}
+      </div>
+    </div>
   );
 }
-export default TabsCustomAnimation;

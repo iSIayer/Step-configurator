@@ -9,7 +9,7 @@ import {
 import { BuildingLibraryIcon } from "@heroicons/react/24/outline";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TabsCustomAnimation from "./components/Tabs/TabsCustom";
+import { TabsDefault } from "./components/Tabs/TabsCustom";
 // import { icons } from "./components/HeroIcons/HeroIcons";
 
 export const App = () => {
@@ -39,9 +39,14 @@ export const App = () => {
   }
 
   const data = stupidData[0].uidl[0];
+
+  const tabsData = stupidData[0].uidl[0].children[1].children[0].map(
+    (el) => el.children
+  )[0];
+
   const steps = data.children.filter((element) => element.type === "step");
-  const status = data.children.map((elem) => elem.condition);
-  console.log(status);
+  // const status = data.children.map((elem) => elem.condition);
+  // console.log(status);
 
   const warningToast = () => {
     activeStep === steps.length - 1 &&
@@ -102,9 +107,9 @@ export const App = () => {
         <div className="mt-32 flex justify-between">
           {steps[activeStep] ? (
             steps[activeStep].children.map((paragraph, idx) => (
-              <div className="mt-32 flex justify-between" key={idx}>
+              <div className="mt-32 flex mx-auto" key={idx}>
                 {steps[activeStep].text === "Transactions" ? (
-                  <TabsCustomAnimation />
+                  <TabsDefault tabsData={tabsData} />
                 ) : (
                   paragraph.text
                 )}
